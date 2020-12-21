@@ -1,4 +1,4 @@
-module gitlab.bareksa.com/proto-backend/forest
+module bareksa/forest
 
 go 1.13
 
