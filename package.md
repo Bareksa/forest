@@ -1,7 +1,7 @@
-# begundal
---
-    import "."
+# forest
 
+--
+import "."
 
 ## Usage
 
@@ -16,105 +16,118 @@ const (
 )
 ```
 
-#### func  GetConfig
+#### func GetConfig
 
 ```go
 func GetConfig(ctx context.Context, path string) (data []byte, err error)
 ```
+
 GetConfig returns config from vault. The path format is '/{secret engine
 name}/{secret name}'
 
 Example: `data, err := vault.GetConfig(context.Background(), "/kv/foo")`
 
-#### func  GetConfigLoad
+#### func GetConfigLoad
 
 ```go
 func GetConfigLoad(ctx context.Context, path string, model interface{}) (err error)
 ```
+
 GetConfigLoad returns config and loaded into a variable The path format is
 '/{secret engine name}/{secret name}'
 
-#### func  GetKeyValue
+#### func GetKeyValue
 
 ```go
 func GetKeyValue(ctx context.Context, key string) (data []byte, err error)
 ```
+
 GetKeyValue returns key value store from vault. 'Key' is the key name. Like for
 example 'ms-order-conf'
 
-#### func  GetKeyValueLoad
+#### func GetKeyValueLoad
 
 ```go
 func GetKeyValueLoad(ctx context.Context, key string, model interface{}) (err error)
 ```
+
 GetKeyValueLoad returns config and loaded into a variable 'Key' is the key name.
 Like for example 'ms-order-conf'
 
-#### func  Init
+#### func Init
 
 ```go
 func Init(token string, opts ...OptionFunc) (err error)
 ```
+
 Init enables global top level functions
 
-#### func  RenewTokenOther
+#### func RenewTokenOther
 
 ```go
 func RenewTokenOther(ctx context.Context, token string) (err error)
 ```
+
 RenewTokenOther attempts to renew passed token using self's token
 
-#### func  RenewTokenOverride
+#### func RenewTokenOverride
 
 ```go
 func RenewTokenOverride(ctx context.Context, token string) (err error)
 ```
+
 RenewTokenOverride attempts to renew passed token with passed token as auth
 
-#### func  RenewTokenSelf
+#### func RenewTokenSelf
 
 ```go
 func RenewTokenSelf(ctx context.Context) (err error)
 ```
+
 RenewTokenSelf attempts to renew token registered to self
 
-#### func  TransitDecrypt
+#### func TransitDecrypt
 
 ```go
 func TransitDecrypt(ctx context.Context, key, cipherText string) (data []byte, err error)
 ```
+
 TransitDecrypt decrypts a transit encrypted payload
 
-#### func  TransitDecryptStream
+#### func TransitDecryptStream
 
 ```go
 func TransitDecryptStream(ctx context.Context, key string, cipher io.Reader) (payload io.Reader, err error)
 ```
+
 TransitDecryptStream decrypts a transit encrypted payload in streaming manner.
 Best usage is if you expect a big ciphertext from whatever your source is.
 
-#### func  TransitEncrypt
+#### func TransitEncrypt
 
 ```go
 func TransitEncrypt(ctx context.Context, key string, payload []byte) (cipherText string, err error)
 ```
+
 TransitEncrypt will encrypt payload for sending somewhere else. 'key' is the
 encryptor name.
 
-#### func  TransitEncryptStream
+#### func TransitEncryptStream
 
 ```go
 func TransitEncryptStream(ctx context.Context, key string, payload io.Reader) (cipher io.Reader, err error)
 ```
+
 TransitEncryptStream will encrypt payload in stream manner to prevent memory
 overload on huge number of operation. Use this function for big files. The
 returned io Reader is a stream of pure encoded vault data.
 
-#### func  UpsertPolicy
+#### func UpsertPolicy
 
 ```go
 func UpsertPolicy(ctx context.Context, policy string, permissions map[string][]Capability) (err error)
 ```
+
 UpsertPolicy creates/updates a policy. Token used in the instance must have the
 permission to even update policy itself. Root token have all permissions
 
@@ -213,12 +226,13 @@ type CreateTokenInstance struct {
 
 CreateTokenInstance struct to create token
 
-#### func  CreateNewToken
+#### func CreateNewToken
 
 ```go
 func CreateNewToken() *CreateTokenInstance
 ```
-CreateNewToken creates an instance of Token override. Call ``.Do(ctx)`` on the
+
+CreateNewToken creates an instance of Token override. Call `.Do(ctx)` on the
 instance to actually create new token. Default value for instance follows vault
 token documentation, on here:
 https://www.vaultproject.io/api/auth/token#parameters
@@ -226,135 +240,152 @@ https://www.vaultproject.io/api/auth/token#parameters
 Which means the new token will be renewable by default and has display name of
 'token'
 
-#### func (*CreateTokenInstance) Do
+#### func (\*CreateTokenInstance) Do
 
 ```go
 func (c *CreateTokenInstance) Do(ctx context.Context) (token string, err error)
 ```
+
 Do creates the token.
 
-#### func (*CreateTokenInstance) DoOverride
+#### func (\*CreateTokenInstance) DoOverride
 
 ```go
 func (c *CreateTokenInstance) DoOverride(ctx context.Context, authToken string) (token string, err error)
 ```
+
 DoOverride creates the token, with passed token as auth and parent if orphan
 status is false (or no parent is true)
 
-#### func (*CreateTokenInstance) WithCurrentTokenAsParent
+#### func (\*CreateTokenInstance) WithCurrentTokenAsParent
 
 ```go
 func (c *CreateTokenInstance) WithCurrentTokenAsParent(b bool) *CreateTokenInstance
 ```
+
 WithCurrentTokenAsParent Uses instance token as parent. Default true. If using
 DoOverride(token), the override token will be set as parent instead.
 
-#### func (*CreateTokenInstance) WithDefaultPolicy
+#### func (\*CreateTokenInstance) WithDefaultPolicy
 
 ```go
 func (c *CreateTokenInstance) WithDefaultPolicy(b bool) *CreateTokenInstance
 ```
+
 WithDefaultPolicy replaces instance default policy. by default true
 
-#### func (*CreateTokenInstance) WithDisplayName
+#### func (\*CreateTokenInstance) WithDisplayName
 
 ```go
 func (c *CreateTokenInstance) WithDisplayName(s string) *CreateTokenInstance
 ```
+
 WithDisplayName replaces token display name
 
-#### func (*CreateTokenInstance) WithEntityAlias
+#### func (\*CreateTokenInstance) WithEntityAlias
 
 ```go
 func (c *CreateTokenInstance) WithEntityAlias(s string) *CreateTokenInstance
 ```
+
 WithEntityAlias replaces instance entity alias. MUST BE USED alongside
 WithRoleName and Role name must exist within vault.
 
-#### func (*CreateTokenInstance) WithExplicitMaxTTL
+#### func (\*CreateTokenInstance) WithExplicitMaxTTL
 
 ```go
 func (c *CreateTokenInstance) WithExplicitMaxTTL(t time.Duration) *CreateTokenInstance
 ```
+
 WithExplicitMaxTTL replaces instance explicit time to live, which by default
 will depends on Vault's default lease TTL If this method is called, duration
 will be rounded down to the nearest hour argument passed with minimum value of 1
 hour
 
-#### func (*CreateTokenInstance) WithID
+#### func (\*CreateTokenInstance) WithID
 
 ```go
 func (c *CreateTokenInstance) WithID(id string) *CreateTokenInstance
 ```
+
 WithID replaces instance ID. Make sure there's no character '.' in the argument
 string
 
-#### func (*CreateTokenInstance) WithMeta
+#### func (\*CreateTokenInstance) WithMeta
 
 ```go
 func (c *CreateTokenInstance) WithMeta(metadata map[string]string) *CreateTokenInstance
 ```
+
 WithMeta replaces instance metadata
 
-#### func (*CreateTokenInstance) WithNumberOfUses
+#### func (\*CreateTokenInstance) WithNumberOfUses
 
 ```go
 func (c *CreateTokenInstance) WithNumberOfUses(i int) *CreateTokenInstance
 ```
+
 WithNumberOfUses replaces token's allowed number of usage. Signing in to vault
 using UI with the token is considered used one time. By default 0, which is
 infinite.
 
-#### func (*CreateTokenInstance) WithPeriod
+#### func (\*CreateTokenInstance) WithPeriod
 
 ```go
 func (c *CreateTokenInstance) WithPeriod(t time.Duration) *CreateTokenInstance
 ```
+
 WithPeriod replaces token period. Token that is not renewed in this set of time
 cannot be renewed again. By default, if unset will follow's Vault's default
 lease TTL. Has minimum value of 1 hour. Only hourly is supported in this
 package.
 
-#### func (*CreateTokenInstance) WithPolicies
+#### func (\*CreateTokenInstance) WithPolicies
 
 ```go
 func (c *CreateTokenInstance) WithPolicies(policies ...string) *CreateTokenInstance
 ```
+
 WithPolicies replaces instance policies
 
-#### func (*CreateTokenInstance) WithRenewableStatus
+#### func (\*CreateTokenInstance) WithRenewableStatus
 
 ```go
 func (c *CreateTokenInstance) WithRenewableStatus(b bool) *CreateTokenInstance
 ```
+
 WithRenewableStatus replaces instance renewable. default true.
 
-#### func (*CreateTokenInstance) WithRoleName
+#### func (\*CreateTokenInstance) WithRoleName
 
 ```go
 func (c *CreateTokenInstance) WithRoleName(rolename string) *CreateTokenInstance
 ```
+
 WithRoleName replaces instance rolename.
 
-#### func (*CreateTokenInstance) WithSetAsBatchToken
+#### func (\*CreateTokenInstance) WithSetAsBatchToken
 
 ```go
 func (c *CreateTokenInstance) WithSetAsBatchToken() *CreateTokenInstance
 ```
+
 WithSetAsBatchToken replaces instance token type
 
-#### func (*CreateTokenInstance) WithSetAsServiceToken
+#### func (\*CreateTokenInstance) WithSetAsServiceToken
 
 ```go
 func (c *CreateTokenInstance) WithSetAsServiceToken() *CreateTokenInstance
 ```
+
 WithSetAsServiceToken replaces instance token type
 
-#### func (*CreateTokenInstance) WithTimeToLive
+#### func (\*CreateTokenInstance) WithTimeToLive
 
 ```go
 func (c *CreateTokenInstance) WithTimeToLive(t time.Duration) *CreateTokenInstance
 ```
+
 WithTimeToLive replaces instance time to live, which by default will depends on
 Vault's default lease TTL If this method is called, duration will be rounded
 down to the nearest hour argument passed with minimum value of 1 hour Only
@@ -393,18 +424,20 @@ type LookupToken struct {
 
 LookupToken token lookup
 
-#### func  LookupOther
+#### func LookupOther
 
 ```go
 func LookupOther(ctx context.Context, token string) (lookup LookupToken, err error)
 ```
+
 LookupOther lookup information on current token used in the instance
 
-#### func  LookupSelf
+#### func LookupSelf
 
 ```go
 func LookupSelf(ctx context.Context) (token LookupToken, err error)
 ```
+
 LookupSelf lookup information on current token used in the instance
 
 #### type OptionFunc
@@ -415,31 +448,31 @@ type OptionFunc func(options *Config)
 
 OptionFunc opts
 
-#### func  WithAPIVersion
+#### func WithAPIVersion
 
 ```go
 func WithAPIVersion(version APIVersion) OptionFunc
 ```
 
-#### func  WithHost
+#### func WithHost
 
 ```go
 func WithHost(hostname string) OptionFunc
 ```
 
-#### func  WithHttpClient
+#### func WithHttpClient
 
 ```go
 func WithHttpClient(httpClient *http.Client) OptionFunc
 ```
 
-#### func  WithKeyValueEngine
+#### func WithKeyValueEngine
 
 ```go
 func WithKeyValueEngine(engine string) OptionFunc
 ```
 
-#### func  WithTransitEngine
+#### func WithTransitEngine
 
 ```go
 func WithTransitEngine(engine string) OptionFunc
@@ -468,11 +501,12 @@ type PolicyData struct {
 
 PolicyData struct
 
-#### func  CheckPolicy
+#### func CheckPolicy
 
 ```go
 func CheckPolicy(ctx context.Context, policy string) (d PolicyData, err error)
 ```
+
 CheckPolicy checks if policy exists and gets it's data
 
 #### type PolicyResponse
@@ -502,26 +536,29 @@ type Vault struct {
 
 Vault struct
 
-#### func  NewClient
+#### func NewClient
 
 ```go
 func NewClient(token string, opts ...OptionFunc) (*Vault, error)
 ```
+
 NewClient creates a new vault instance
 
-#### func (*Vault) CheckPolicy
+#### func (\*Vault) CheckPolicy
 
 ```go
 func (v *Vault) CheckPolicy(ctx context.Context, policy string) (d PolicyData, err error)
 ```
+
 CheckPolicy checks if policy exists and gets it's data
 
-#### func (*Vault) CreateNewToken
+#### func (\*Vault) CreateNewToken
 
 ```go
 func (v *Vault) CreateNewToken() *CreateTokenInstance
 ```
-CreateNewToken creates an instance of Token override. Call ``.Do(ctx)`` on the
+
+CreateNewToken creates an instance of Token override. Call `.Do(ctx)` on the
 instance to actually create new token. Default value for instance follows vault
 token documentation, on here:
 https://www.vaultproject.io/api/auth/token#parameters
@@ -529,115 +566,129 @@ https://www.vaultproject.io/api/auth/token#parameters
 Which means the new token will be renewable by default and has display name of
 'token'
 
-#### func (*Vault) GetConfig
+#### func (\*Vault) GetConfig
 
 ```go
 func (v *Vault) GetConfig(ctx context.Context, path string) (data []byte, err error)
 ```
+
 GetConfig returns config from vault. The path format is '/{secret engine
 name}/{secret name}'
 
 Example: `data, err := vault.GetConfig(context.Background(), "/kv/foo")`
 
-#### func (*Vault) GetConfigLoad
+#### func (\*Vault) GetConfigLoad
 
 ```go
 func (v *Vault) GetConfigLoad(ctx context.Context, path string, model interface{}) (err error)
 ```
+
 GetConfigLoad returns config and loaded into a variable The path format is
 '/{secret engine name}/{secret name}'
 
-#### func (*Vault) GetKeyValue
+#### func (\*Vault) GetKeyValue
 
 ```go
 func (v *Vault) GetKeyValue(ctx context.Context, key string) (data []byte, err error)
 ```
+
 GetKeyValue returns key value store from vault. 'Key' is the key name. Like for
 example 'ms-order-conf'
 
-#### func (*Vault) GetKeyValueLoad
+#### func (\*Vault) GetKeyValueLoad
 
 ```go
 func (v *Vault) GetKeyValueLoad(ctx context.Context, key string, model interface{}) (err error)
 ```
+
 GetKeyValueLoad returns config and loaded into a variable 'Key' is the key name.
 Like for example 'ms-order-conf'
 
-#### func (*Vault) LookupOther
+#### func (\*Vault) LookupOther
 
 ```go
 func (v *Vault) LookupOther(ctx context.Context, token string) (lookup LookupToken, err error)
 ```
+
 LookupOther lookup information on passed token
 
-#### func (*Vault) LookupSelf
+#### func (\*Vault) LookupSelf
 
 ```go
 func (v *Vault) LookupSelf(ctx context.Context) (lookup LookupToken, err error)
 ```
+
 LookupSelf lookup information on current token used in the instance
 
-#### func (*Vault) RenewTokenOther
+#### func (\*Vault) RenewTokenOther
 
 ```go
 func (v *Vault) RenewTokenOther(ctx context.Context, token string) (err error)
 ```
+
 RenewTokenOther attempts to renew passed token using self's token
 
-#### func (*Vault) RenewTokenOverride
+#### func (\*Vault) RenewTokenOverride
 
 ```go
 func (v *Vault) RenewTokenOverride(ctx context.Context, token string) (err error)
 ```
+
 RenewTokenOverride attempts to renew passed token with passed token as auth
 
-#### func (*Vault) RenewTokenSelf
+#### func (\*Vault) RenewTokenSelf
 
 ```go
 func (v *Vault) RenewTokenSelf(ctx context.Context) (err error)
 ```
+
 RenewTokenSelf attempts to renew token registered to self. Cannot renew root
 token with 0 time to live (never expire).
 
-#### func (*Vault) TransitDecrypt
+#### func (\*Vault) TransitDecrypt
 
 ```go
 func (v *Vault) TransitDecrypt(ctx context.Context, key, cipherText string) (data []byte, err error)
 ```
+
 TransitDecrypt decrypts a transit encrypted payload. If decyprting a big
 ciphertext like if decrypted it's actually an image, please use
 TransitDecryptStream.
 
-#### func (*Vault) TransitDecryptStream
+#### func (\*Vault) TransitDecryptStream
 
 ```go
 func (v *Vault) TransitDecryptStream(ctx context.Context, key string, cipher io.Reader) (payload io.Reader, err error)
 ```
+
 TransitDecryptStream decrypts a transit encrypted payload in streaming manner.
 Best usage is if you expect a big ciphertext from whatever your source is.
 
-#### func (*Vault) TransitEncrypt
+#### func (\*Vault) TransitEncrypt
 
 ```go
 func (v *Vault) TransitEncrypt(ctx context.Context, key string, payload []byte) (cipherText string, err error)
 ```
+
 TransitEncrypt will encrypt payload for sending somewhere else. 'key' is the
 encryptor name.
 
-#### func (*Vault) TransitEncryptStream
+#### func (\*Vault) TransitEncryptStream
 
 ```go
 func (v *Vault) TransitEncryptStream(ctx context.Context, key string, payload io.Reader) (io.Reader, error)
 ```
+
 TransitEncryptStream will encrypt payload in stream manner to prevent memory
 overload on huge number of operation. Use this function for big files. The
 returned io Reader is a stream of pure encoded vault data without bells and
 whistles of JSON.
 
-#### func (*Vault) UpsertPolicy
+#### func (\*Vault) UpsertPolicy
 
 ```go
 func (v *Vault) UpsertPolicy(ctx context.Context, policy string, permissions map[string][]Capability) (err error)
 ```
+
 UpsertPolicy creates/updates a policy. Token used in the instance must have the
 permission to even update policy itself. Root token have all permissions

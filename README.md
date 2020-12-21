@@ -1,4 +1,4 @@
-# Begundal
+# forest
 
 ![forthebadge made-with-Go](http://ForTheBadge.com/images/badges/made-with-go.svg)
 
@@ -17,7 +17,7 @@ A simplified vault request. Taylored to Bareksa's paradigm.
 # How to Install
 
 ```bash
-$ GOPRIVATE=gitlab.bareksa.com go get -u gitlab.bareksa.com/backend/begundal
+$ GOPRIVATE=gitlab.bareksa.com go get -u gitlab.bareksa.com/backend/forest
 ```
 
 Since this is a private repo, we may need to override the _https_ protocol for `go get` to _ssh_.
@@ -38,11 +38,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"gitlab.bareksa.com/backend/begundal"
+	"gitlab.bareksa.com/backend/forest"
 )
 
 func main() {
-	client := begundal.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q")
+	client := forest.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q")
 	config, err := client.GetConfig(context.Background(), "/kv/foo")
 	if err != nil {
 		panic(err)
@@ -55,7 +55,7 @@ Also you can use custom http clients
 
 ```go
 httpClient := &http.Client{Timeout: 10 * time.Second}
-client := begundal.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q", begundal.WithHttpClient(httpClient))
+client := forest.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q", forest.WithHttpClient(httpClient))
 ```
 
 # Running Test
@@ -72,5 +72,5 @@ $ go test -token [token] -host [host] -v ./...
 
 ## Contributor
 
-- [Tigor Hutasuhut](https://gitlab.bareksa.com/tigor)
-- [Arif Rakhman](https://gitlab.bareksa.com/arif_rachman)
+-   [Tigor Hutasuhut](https://gitlab.bareksa.com/tigor)
+-   [Arif Rakhman](https://gitlab.bareksa.com/arif_rachman)

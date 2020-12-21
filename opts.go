@@ -1,4 +1,4 @@
-package begundal
+package forest
 
 import "net/http"
 
@@ -35,30 +35,35 @@ type Options struct {
 	HTTPClient      *http.Client // Uses default http client if nil
 }
 
+// WithHost f
 func WithHost(hostname string) OptionFunc {
 	return func(o *Config) {
 		o.Host = hostname
 	}
 }
 
+// WithAPIVersion f
 func WithAPIVersion(version APIVersion) OptionFunc {
 	return func(o *Config) {
 		o.VaultAPIVersion = version
 	}
 }
 
-func WithHttpClient(httpClient *http.Client) OptionFunc {
+// withHTTPClient f
+func withHTTPClient(httpClient *http.Client) OptionFunc {
 	return func(o *Config) {
 		o.HTTPClient = httpClient
 	}
 }
 
+// WithTransitEngine f
 func WithTransitEngine(engine string) OptionFunc {
 	return func(o *Config) {
 		o.TransitEngine = engine
 	}
 }
 
+// WithKeyValueEngine f
 func WithKeyValueEngine(engine string) OptionFunc {
 	return func(o *Config) {
 		o.KeyValueEngine = engine

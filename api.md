@@ -1,6 +1,6 @@
-# Begundal API Documentation
+# forest API Documentation
 
-There are two ways to initiate Begundal. Returning a client instance or start a global
+There are two ways to initiate forest. Returning a client instance or start a global
 initialization.
 
 Use global initialization method for simple use everywhere in the code, but less flexible. If using
@@ -22,15 +22,15 @@ import (
 	"fmt"
 	"log"
 
-	"gitlab.bareksa.com/backend/begundal"
+	"gitlab.bareksa.com/backend/forest"
 )
 
 func main() {
 	token := "abc"
 	host := "http://127.0.0.1"
-	// This initializes begundal and allow usage for
+	// This initializes forest and allow usage for
 	// other methods
-	begundal.Init(token, begundal.WithHost(host))
+	forest.Init(token, forest.WithHost(host))
 }
 ```
 
@@ -47,17 +47,17 @@ import (
 	"fmt"
 	"log"
 
-	"gitlab.bareksa.com/backend/begundal"
+	"gitlab.bareksa.com/backend/forest"
 )
 
 func main() {
 	token := "abc"
 	host := "http://127.0.0.1"
 	transitEngine := "sayap-krispy"
-	begundal.NewClient(
+	forest.NewClient(
 		token,
-		begundal.WithHost(host),
-		begundal.WithTransitEngine(transitEngine),
+		forest.WithHost(host),
+		forest.WithTransitEngine(transitEngine),
 	)
 }
 ```
@@ -75,7 +75,7 @@ import (
 	"fmt"
 	"log"
 
-	"gitlab.bareksa.com/backend/begundal"
+	"gitlab.bareksa.com/backend/forest"
 )
 
 func main() {
@@ -87,16 +87,16 @@ func main() {
 	if host == "" {
 		log.Fatal("Host is empty")
 	}
-	err := begundal.Init(
+	err := forest.Init(
 		token,
-		begundal.WithHost(host),
-		begundal.WithTransitEngine("ayam-kuning"),
-		begundal.WithKeyValueEngine("bukan-consul"),
+		forest.WithHost(host),
+		forest.WithTransitEngine("ayam-kuning"),
+		forest.WithKeyValueEngine("bukan-consul"),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	cipher, err := begundal.TransitEncrypt(context.Background(), "awawa", []byte(`1234`))
+	cipher, err := forest.TransitEncrypt(context.Background(), "awawa", []byte(`1234`))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -117,7 +117,7 @@ import (
 	"fmt"
 	"log"
 
-	"gitlab.bareksa.com/backend/begundal"
+	"gitlab.bareksa.com/backend/forest"
 )
 
 func main() {
@@ -129,11 +129,11 @@ func main() {
 	if host == "" {
 		log.Fatal("Host is empty")
 	}
-	vault, err := begundal.NewClient(
+	vault, err := forest.NewClient(
 		token,
-		begundal.WithHost(host),
-		begundal.WithTransitEngine("ayam-kuning"),
-		begundal.WithKeyValueEngine("bukan-consul"),
+		forest.WithHost(host),
+		forest.WithTransitEngine("ayam-kuning"),
+		forest.WithKeyValueEngine("bukan-consul"),
 	)
 	if err != nil {
 		log.Fatal(err)

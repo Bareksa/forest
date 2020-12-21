@@ -1,4 +1,4 @@
-package begundal
+package forest
 
 import (
 	"encoding/json"
