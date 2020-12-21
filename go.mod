@@ -1,4 +1,4 @@
-module bareksa/forest
+module github.com/Bareksa/forest
 
 go 1.13
 
