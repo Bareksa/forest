@@ -27,11 +27,11 @@ import (
 
 func main() {
 	client := forest.NewClient("s.token") // This token is an example
-	config, err := client.GetConfig(context.Background(), "/kv/foo")
+	conf, err := forest.GetKeyValue(context.Background(), "some-conf")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(config))
+	fmt.Println(string(conf))
 }
 ```
 
