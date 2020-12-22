@@ -42,6 +42,41 @@ httpClient := &http.Client{Timeout: 10 * time.Second}
 client := forest.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q", forest.WithHttpClient(httpClient))
 ```
 
+# Integration with Viper Example
+
+```go
+package main
+
+import (
+	"bytes"
+	"context"
+	"flag"
+	"fmt"
+	"log"
+
+	"github.com/Bareksa/forest"
+	"github.com/spf13/viper"
+)
+
+func main() {
+	token := flag.String("token", "", "-token [token]")
+	host := flag.String("host", "http://127.0.0.1:8200", "-host [host]")
+	flag.Parse()
+	err := forest.Init(*token, forest.WithHost(*host))
+	if err != nil {
+		log.Fatal(err)
+	}
+	config, err := forest.GetKeyValue(context.Background(), "microservice-config")
+	if err != nil {
+		log.Fatal(err)
+	}
+	viper.SetConfigType("json")
+	viper.ReadConfig(bytes.NewBuffer(config))
+	ver := viper.GetString("app_version")
+	fmt.Println(ver)
+}
+```
+
 # Running Test
 
 Please note integration test have to be modified for own use until vault dev is ready.
