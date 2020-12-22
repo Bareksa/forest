@@ -52,7 +52,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/Bareksa/forest"
 	"github.com/spf13/viper"
