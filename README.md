@@ -26,7 +26,7 @@ import (
 )
 
 func main() {
-	client := forest.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q") // This token is an example
+	client := forest.NewClient("s.token") // This token is an example
 	config, err := client.GetConfig(context.Background(), "/kv/foo")
 	if err != nil {
 		panic(err)
@@ -39,7 +39,7 @@ Also you can use custom http clients
 
 ```go
 httpClient := &http.Client{Timeout: 10 * time.Second}
-client := forest.NewClient("s.9bho6AeRSjyfObBNpgHUDH1Q", forest.WithHttpClient(httpClient))
+client := forest.NewClient("s.token", forest.WithHttpClient(httpClient))
 ```
 
 # Integration with Viper Example
@@ -50,34 +50,35 @@ package main
 import (
 	"bytes"
 	"context"
-	"flag"
 	"fmt"
-	"log"
+	"os"
+	"time"
 
 	"github.com/Bareksa/forest"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	token := flag.String("token", "", "-token [token]")
-	host := flag.String("host", "http://127.0.0.1:8200", "-host [host]")
-	flag.Parse()
-	err := forest.Init(*token, forest.WithHost(*host))
+	vaultHost := os.Getenv("VAULT_HOST")
+	vaultToken := os.Getenv("VAULT_TOKEN")
+
+	forest.Init(vaultToken, forest.WithHost(vaultHost))
+
+	conf, err := forest.GetKeyValue(context.Background(), "some-conf")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Failed to read configuration from vault : %v", err)
+		os.Exit(1)
 	}
-	config, err := forest.GetKeyValue(context.Background(), "microservice-config")
-	if err != nil {
-		log.Fatal(err)
-	}
-	viper.SetConfigType("json")
-	viper.ReadConfig(bytes.NewBuffer(config))
-	ver := viper.GetString("app_version")
-	fmt.Println(ver)
+
+	viper.SetConfigType("json") // Need to explicitly set this to json
+	viper.ReadConfig(bytes.NewBuffer(conf))
+
+	fmt.Printf("Using configuration file from : %s \n", vaultHost)
+
 }
 ```
 
-# Running Test
+# Running Test for this Library Package
 
 Please note integration test have to be modified for own use until vault dev is ready.
 
