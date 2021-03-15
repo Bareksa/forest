@@ -49,8 +49,8 @@ func WithAPIVersion(version APIVersion) OptionFunc {
 	}
 }
 
-// withHTTPClient f
-func withHTTPClient(httpClient *http.Client) OptionFunc {
+// WithHTTPClient f
+func WithHTTPClient(httpClient *http.Client) OptionFunc {
 	return func(o *Config) {
 		o.HTTPClient = httpClient
 	}
