@@ -11,7 +11,7 @@ import (
 )
 
 func Test_TransitEncrypt_TransitEncrypt(t *testing.T) {
-	data, err := TransitEncrypt(context.TODO(), "awawa", []byte(`{"ayam":"kuning","harga":29000}`))
+	data, err := TransitEncrypt(context.TODO(), "aes", []byte(`{"ayam":"kuning","harga":29000}`))
 	require.NoError(t, err)
 
 	assert.Contains(t, string(data), "vault:v1")
@@ -19,7 +19,7 @@ func Test_TransitEncrypt_TransitEncrypt(t *testing.T) {
 
 func Test_TransitEncrypt_TransitEncryptStream(t *testing.T) {
 	ccc := bytes.NewBufferString(`{"ayam":"kuning","harga":29000}`)
-	data, err := TransitEncryptStream(context.TODO(), "awawa", ccc)
+	data, err := TransitEncryptStream(context.TODO(), "aes", ccc)
 	require.NoError(t, err)
 	sss, err := ioutil.ReadAll(data)
 	require.NoError(t, err)

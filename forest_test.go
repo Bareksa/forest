@@ -15,7 +15,8 @@ func init() {
 		return true
 	}()
 	flag.Parse()
-	err := Init(*testToken, WithHost(*testHost))
+	err := Init(
+		*testToken, WithHost(*testHost), WithTransitEngine("forest_transit_test"), WithKeyValueEngine("forest_kv"))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -42,6 +42,8 @@ func checkNil() (err error) {
 	return
 }
 
+//  DEPRECATED. USE GetKeyValue instead.
+//
 // GetConfig returns config from vault. The path format is '/{secret engine name}/{secret name}'
 //
 // Example: `data, err := vault.GetConfig(context.Background(), "/kv/foo")`
@@ -52,6 +54,8 @@ func GetConfig(ctx context.Context, path string) (data []byte, err error) {
 	return gVault.GetConfig(ctx, path)
 }
 
+//  DEPRECATED. USE GetKeyValueLoad instead.
+//
 // GetConfigLoad returns config and loaded into a variable
 // The path format is '/{secret engine name}/{secret name}'
 func GetConfigLoad(ctx context.Context, path string, model interface{}) (err error) {
@@ -210,4 +214,12 @@ func GetEngineKeys(ctx context.Context, engine string) (configs []string, err er
 		return
 	}
 	return gVault.GetEngineKeys(ctx, engine)
+}
+
+// UpsertKeyValue creates / updates secret of `key`. Key here means the config.
+func UpsertKeyValue(ctx context.Context, key string, data interface{}) (err error) {
+	if err = checkNil(); err != nil {
+		return
+	}
+	return gVault.UpsertKeyValue(ctx, key, data)
 }

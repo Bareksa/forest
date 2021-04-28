@@ -1,10 +1,12 @@
 package forest
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
 )
 
 // ConfigResponse struct
@@ -30,6 +32,8 @@ type configList struct {
 	} `json:"data"`
 }
 
+//  DEPRECATED. USE GetKeyValue instead.
+//
 // GetConfig returns config from vault. The path format is '/{secret engine name}/{secret name}'
 //
 // Example: `data, err := vault.GetConfig(context.Background(), "/kv/foo")`
@@ -54,6 +58,8 @@ func (v *Vault) GetConfig(ctx context.Context, path string) (data []byte, err er
 	return ddd.Data, nil
 }
 
+//  DEPRECATED. USE GetKeyValueLoad instead.
+//
 // GetConfigLoad returns config and loaded into a variable
 // The path format is '/{secret engine name}/{secret name}'
 func (v *Vault) GetConfigLoad(ctx context.Context, path string, model interface{}) (err error) {
@@ -119,5 +125,37 @@ func (v *Vault) GetKeyValueLoad(ctx context.Context, key string, model interface
 		return
 	}
 	err = json.Unmarshal(data, model)
+	return
+}
+
+// UpsertKeyValue method
+func (v *Vault) UpsertKeyValue(ctx context.Context, key string, data interface{}) (err error) {
+	var val []byte
+	switch t := data.(type) {
+	case []byte:
+		val = t
+	case string:
+		val = []byte(t)
+	default:
+		kind := reflect.Indirect(reflect.ValueOf(data)).Kind()
+		if kind == reflect.Struct || kind == reflect.Map || kind == reflect.Slice {
+			val, _ = json.Marshal(data)
+		} else {
+			return fmt.Errorf("unsupported file type: '%s'", kind)
+		}
+	}
+	path := fmt.Sprintf("/%s/%s", v.Config.KeyValueEngine, key)
+	req, err := v.requestGen(ctx, http.MethodPost, path, bytes.NewBuffer(val))
+	if err != nil {
+		return
+	}
+	res, err := v.Config.HTTPClient.Do(req)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	if err := checkErrorResponse(res); err != nil {
+		return err
+	}
 	return
 }
